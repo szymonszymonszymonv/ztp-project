@@ -1,29 +1,28 @@
-import Order
+import uuid
+from Order import Order
+
 
 class Invoice :
-
     def  __init__(self, ordering, products):
         self.ordering = ordering
         self.products = products
+        self.number = uuid.uuid4()
+        self.sumPrice = self.get_sum_price()
 
-    def getOrdering(self):
-        print(self.ordering)
+    def get_ordering(self):
         return self.ordering
 
-
-    def getSumPrice(self):
+    def get_sum_price(self):
         sum_price = 0
         for val in self.products:
-            sum_price += val.price
-            sum_price *= ((val.tax + 100) / 100)
+            price = val.price
+            price *= ((val.tax + 100) / 100)
+            sum_price += price
         return sum_price
 
-    def getProducts(self):
-        print(self.products.description)
+    def get_products(self):
         return self.products
-
-
-
-
-
+    
+    def get_number(self):
+        return self.number
 

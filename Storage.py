@@ -18,6 +18,22 @@ class Storage(metaclass=Singleton):
         if not product in self.products:
             return False
         self.products[product] -= 1
-        if self.products[product] == 0:
+        if self.products[product] <= 0:
             self.products.pop(product, None)
+            
+    def add_products(self, products):
+        for key, val in products.items():
+            if key in self.products:
+                self.products[key] += val
+            else:
+                self.products[key] = val
+                
+    def delete_products(self, products):
+        for key, val in products.items():
+            if key in self.products:
+                self.products[key] -= val
+                if self.products[key] <= 0:
+                    self.products.pop(key, None)
+            
+        pass
             
