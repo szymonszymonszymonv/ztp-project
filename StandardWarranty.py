@@ -1,11 +1,13 @@
+from Warranty import Warranty
 
-class StandardWarranty:
+
+class StandardWarranty(Warranty):
 
     def get_description(self):
-        return self.warranty.get_description()
+        return f'{self._product.get_description()}, included standard warranty'
 
     def get_price(self):
-        return self.warranty.get_price()
+        return self._product.get_price() * 1.1
 
     def get_tax(self):
-        return self.warranty.get_tax()
+        return self._product.get_tax() * 1.1

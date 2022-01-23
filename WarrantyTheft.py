@@ -3,20 +3,14 @@ from Warranty import Warranty
 
 class WarrantyTheft(Warranty):
 
-    def __init__(self, description, price, product):
-        super().__init__(product)
-        self.description = description
-        self.price = price
-
-
     def get_description(self):
-        return self.warranty.get_description()
+        return f'{self._product.get_description()}, included theft warranty'
 
     def get_price(self):
-        return self.warranty.get_price()
+        return self._product.get_price() * 1.05
 
     def get_tax(self):
-        return self.warranty.get_tax()
+        return self._product.get_tax() * 1.05
 
 
 

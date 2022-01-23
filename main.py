@@ -2,6 +2,9 @@ from ConcreteCreator import ConcreteCreator
 from Storage import Storage
 from tkinter import *
 from tkinter import ttk
+from WarrantyMechanicalDamage import WarrantyMechanicalDamage
+
+from WarrantyTheft import WarrantyTheft
 
 tv = ConcreteCreator.create("tv", desc="duzy", price=5, tax=2, inches=40)
 tv2 = ConcreteCreator.create("tv", desc="maly", price=2500, tax=100, inches=41)
@@ -11,6 +14,12 @@ s.add_product(tv2)
 s.add_product(tv2)
 s.add_product(tv2)
 s.add_product(tv2)
+
+iphone = ConcreteCreator.create("phone", desc="iphone12", price=5000, tax=500, bluetooth=True)
+iphone_warranty = WarrantyTheft(iphone)
+iphone_warranties = WarrantyMechanicalDamage(iphone_warranty)
+
+print(iphone_warranties.get_description())
 print(s.get_products())
 
 

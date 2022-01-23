@@ -5,10 +5,6 @@ class Warranty:
     def __init__(self, product):
         self._product = product
 
-    @property
-    def warranty(self):
-        return self._product
-
     def get_description(self):
         return self._product.description
 
