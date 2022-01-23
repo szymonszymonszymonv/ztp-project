@@ -6,10 +6,18 @@ class Storage(metaclass=Singleton):
         pass
     
     def get_products(self):
-        pass
+        return self.products
     
     def add_product(self, product):
-        pass
+        if product in self.products:
+            self.products[product] += 1
+        else:
+            self.products[product] = 1
     
     def delete_product(self, product):
-        pass
+        if not product in self.products:
+            return False
+        self.products[product] -= 1
+        if self.products[product] == 0:
+            self.products.pop(product, None)
+            
