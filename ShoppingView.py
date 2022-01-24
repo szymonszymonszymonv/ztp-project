@@ -37,7 +37,7 @@ class ShoppingView():
             print(f"SELECTING: {selected_product}")
             
         def make_order():
-            ordering = name_text
+            ordering = name_text.get()
             order = Order(self.products_cart, ordering, self.mediator)
             self.orders.append(order)
             print(self.orders)
