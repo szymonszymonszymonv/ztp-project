@@ -34,7 +34,7 @@ def select_item(event):
 #app initializer
 app = Tk()
 app.title("Storage")
-app.geometry('500x500')
+app.geometry('600x500')
 
 my_notebook = ttk.Notebook(app)
 my_notebook.pack(pady=15)
@@ -53,12 +53,6 @@ my_notebook.add(frame5, text="experiment")
 #frame1
 storage_list = Listbox(frame1, height=8, width=50, border=0)
 storage_list.grid(row=1, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
-#scrollbar
-scrollbar= Scrollbar(frame1)
-scrollbar.grid(row=4, column=3)
-#scroll to listbox
-storage_list.configure(yscrollcommand=scrollbar.set)
-scrollbar.configure(command=storage_list.yview)
 populate_list()
 #bind select
 storage_list.bind('<<ListboxSelect>>', select_item)
@@ -68,27 +62,43 @@ storage_list.bind('<<ListboxSelect>>', select_item)
 #standard
 warranty = BooleanVar()
 warranty_label = Label(frame1, text='Standard', font=('bold', 10))
-warranty_label.grid(row=1, column=5, sticky=W)
+warranty_label.grid(row=1, column=3, sticky=W)
 warranty_entry = Checkbutton(frame1, variable=warranty, onvalue=True, offvalue=False)
-warranty_entry.grid(row=1, column=6)
+warranty_entry.grid(row=1, column=4)
 
 #theftwarranty
 theft_warranty = BooleanVar()
 theft_warranty_label = Label(frame1, text='Theft', font=('bold', 10))
-theft_warranty_label.grid(row=2, column=5, sticky=W)
+theft_warranty_label.grid(row=2, column=3, sticky=W)
 theft_warranty_entry = Checkbutton(frame1, variable=theft_warranty, onvalue=True, offvalue=False)
-theft_warranty_entry.grid(row=2, column=6)
+theft_warranty_entry.grid(row=2, column=4)
 
 #mechanicalwarranty
 mechanical_warranty = BooleanVar()
 mechanical_warranty_label = Label(frame1, text='Mechanical', font=('bold', 10))
-mechanical_warranty_label.grid(row=3, column=5, sticky=W)
+mechanical_warranty_label.grid(row=3, column=3, sticky=W)
 mechanical_warranty_entry = Checkbutton(frame1, variable=mechanical_warranty, onvalue=True, offvalue=False)
-mechanical_warranty_entry.grid(row=3, column=6)
+mechanical_warranty_entry.grid(row=3, column=4)
+
+#ordering name
+name_text = StringVar()
+name_label = Label(frame1, text='Name', font=('bold', 12))
+name_label.grid(row=4, column=3, sticky=W)
+name_entry = Entry(frame1, textvariable=name_text)
+name_entry.grid(row=4, column=4, sticky=W)
+
 
 #buybutton(?)
-buy_btn = Button(frame1, text='Buy item', width=12)
-buy_btn.grid(row=7, column=0, pady=10)
+buy_btn = Button(frame1, text='Add to order', width=12)
+buy_btn.grid(row=7, column=3, pady=10)
+
+#makeorder
+order_btn = Button(frame1, text='Make order', width=12)
+order_btn.grid(row=13, column=3, pady=10)
+
+#orderlist
+order_list = Listbox(frame1, height=8, width=50, border=0)
+order_list.grid(row=8, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
 
 #frame5
 def generate_input():
