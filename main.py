@@ -14,21 +14,27 @@ s.add_product(tv2)
 s.add_product(tv2)
 s.add_product(tv2)
 
+selected_product = None
+
 def populate_list():
     new_list = []
     storage_list.delete(0, END)
-    for key, value in s.get_products().items():
-        new_list.append({key: value})
         
     for i, (k, v) in enumerate(s.get_products().items()):
         print(f'POPULATE_LIST(): {i, k, v}')
         storage_list.insert(i, k)
+        
 
 def select_item(event):
     global select_item
     index = storage_list.curselection()[0]
     selected_item = storage_list.get(index)
-    print(list(s.get_products())[index])
+    selected_product = list(s.get_products())[index]
+    
+def buy_product():
+    # robimy order z ziomkiem i produktami
+    
+    
 
 
 #app initializer
@@ -87,7 +93,7 @@ mechanical_warranty_entry = Checkbutton(frame1, variable=mechanical_warranty, on
 mechanical_warranty_entry.grid(row=3, column=6)
 
 #buybutton(?)
-buy_btn = Button(frame1, text='Buy item', width=12)
+buy_btn = Button(frame1, text='Buy item', width=12, command=buy_product)
 buy_btn.grid(row=7, column=0, pady=10)
 
 #frame5
