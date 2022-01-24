@@ -29,3 +29,6 @@ class IProduct(metaclass=abc.ABCMeta):
     def get_tax(self):
         """get product tax"""
         raise NotImplementedError
+    
+    def __str__(self):
+        return f'{self.get_description()} ({self.get_price()})'

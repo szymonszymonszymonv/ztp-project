@@ -5,10 +5,11 @@ from Computer import Computer
 
 class ConcreteCreator(Factory):
     
-    def create(t, **kwargs):
+    def create(t, *args):
         types = {
             "phone": Phone,
             "computer": Computer,
             "tv": Tv
         }
-        return types[t.lower()](**kwargs)
+        print(args)
+        return types[t.lower()](*args)
