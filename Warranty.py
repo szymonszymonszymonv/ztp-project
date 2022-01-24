@@ -1,6 +1,6 @@
+from IProduct import IProduct
 
-
-class Warranty:
+class Warranty(IProduct):
 
     def __init__(self, product):
         self._product = product

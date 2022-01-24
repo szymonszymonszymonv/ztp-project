@@ -1,6 +1,9 @@
 from ConcreteCreator import ConcreteCreator
 from Storage import Storage
 from tkinter import *
+from StandardWarranty import StandardWarranty
+from WarrantyMechanicalDamage import WarrantyMechanicalDamage
+from WarrantyTheft import WarrantyTheft
 
 
 class ShoppingView():
@@ -30,13 +33,20 @@ class ShoppingView():
             print(f"SELECTING: {selected_product}")
         
         def buy_product():
-            print(f'KUPUJE PRODUKT: {self.chosen_product}')
-            if not self.chosen_product in self.products_cart:
-                self.products_cart[self.chosen_product] = 1
+            
+            p = StandardWarranty(self.chosen_product) if warranty.get() else self.chosen_product
+            p = WarrantyMechanicalDamage(p) if mechanical_warranty.get() else p
+            p = WarrantyTheft(p) if theft_warranty.get() else p
+            print(f'KUPUJE PRODUKT: {p}')
+            
+            if not p in self.products_cart:
+                self.products_cart[p] = 1
             else:
-                self.products_cart[self.chosen_product] += 1
+                self.products_cart[p] += 1
                 
-            print(self.products_cart)
+            # print(self.products_cart)
+            for k, v in self.products_cart.items():
+                print(k.__str__())
             # robimy order z ziomkiem i produktami
         #frames
         frame1 = Frame(self.notebook, width=500, height=500)
