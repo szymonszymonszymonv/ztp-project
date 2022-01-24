@@ -53,7 +53,7 @@ class ShoppingView():
 
             
         def make_order():
-            ordering = name_text
+            ordering = name_text.get()
             order = Order(self.products_cart, ordering, self.mediator)
             self.orders.append(order)
             # self.state_list.insert(self.orders)
