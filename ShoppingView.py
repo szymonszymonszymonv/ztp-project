@@ -1,16 +1,18 @@
 from ConcreteCreator import ConcreteCreator
+from Mediator import Mediator
 from Storage import Storage
 from tkinter import *
 from StandardWarranty import StandardWarranty
 from WarrantyMechanicalDamage import WarrantyMechanicalDamage
 from WarrantyTheft import WarrantyTheft
-
+from Order import Order
 
 class ShoppingView():
     def __init__(self, app, notebook):
         self.app = app
         self.notebook = notebook
         self.storage = Storage()
+        self.mediator = Mediator(self.storage)
         self.frame1 = Frame(self.notebook, width=500, height=500)
         self.frame5 = Frame(self.notebook, width=500, height=500)
         self.storage_list = Listbox(self.frame1, height=8, width=50, border=0)
@@ -18,13 +20,14 @@ class ShoppingView():
         self.chosen_product = None
         self.product_idx = -1
         self.products_cart = {}
+        self.orders = []
         
     def create_view(self):
+        
         def populate_list():
             self.storage_list.delete(0, END)
             for i, (k, v) in enumerate(self.storage.get_products().items()):
                 self.storage_list.insert(i, k)
-                
 
         def select_item(e):
             global select_item
@@ -32,6 +35,12 @@ class ShoppingView():
             selected_product = list(self.storage.get_products())[index]
             self.chosen_product = selected_product
             print(f"SELECTING: {selected_product}")
+            
+        def make_order():
+            ordering = name_text
+            order = Order(self.products_cart, ordering, self.mediator)
+            self.orders.append(order)
+            print(self.orders)
         
         def buy_product():
             
@@ -109,7 +118,7 @@ class ShoppingView():
         buy_btn.grid(row=6, column=3, pady=10)
 
         #makeorder
-        order_btn = Button(frame1, text='Make order', width=12)
+        order_btn = Button(frame1, text='Make order', width=12, command=make_order)
         order_btn.grid(row=13, column=3, pady=10)
 
         #orderlist
@@ -167,12 +176,12 @@ class ShoppingView():
                 
             product = ConcreteCreator.create(product_type,
                                     description_text.get(),
-                                    price_text.get(),
-                                    tax_text.get(),
+                                    float(price_text.get()),
+                                    float(tax_text.get()),
                                     active_field)
             print(f'adding {type(product)} ({product})')
                 
-            add_product(product)
+            self.storage.add_product(product)
             self.storage_list.delete(0, END)
             populate_list()
 

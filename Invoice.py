@@ -1,6 +1,4 @@
 import uuid
-from Order import Order
-
 
 class Invoice :
     def  __init__(self, ordering, products):
@@ -16,8 +14,8 @@ class Invoice :
     def get_sum_price(self):
         sum_price = 0
         for val in self.products:
-            price = val.price
-            price *= ((val.tax + 100) / 100)
+            price = val.get_price()
+            price *= ((val.get_tax() + 100) / 100)
             sum_price += price
         return sum_price
 

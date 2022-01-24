@@ -1,7 +1,7 @@
 import abc
 
 class IProduct(metaclass=abc.ABCMeta):
-    price: int
+    price: float
     description: str
     tax: float
     

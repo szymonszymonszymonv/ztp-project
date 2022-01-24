@@ -1,6 +1,5 @@
 import abc
-
-from Order import Order
+import Order
 
 class OrderState(abc.ABCMeta):
     order: Order
@@ -21,4 +20,37 @@ class OrderState(abc.ABCMeta):
         """cancel order"""
         raise NotImplementedError
     
+
+
+class OrderInProgressState(OrderState):
+    def __init__(self, order):
+        self.order = order
+        
+    def fulfill(self):
+        self.order.notify_mediator_remove()
+        return
     
+    def cancel(self):
+        self.order.notify_mediator_add()
+        return 
+    
+class OrderFulfilledState(OrderState):
+    def __init__(self, order):
+        self.order = order
+        
+    def fulfill(self):
+        return
+    
+    def cancel(self):
+        self.order.notify_mediator_add()
+        return 
+    
+class OrderCancelledState(OrderState):
+    def __init__(self, order):
+        self.order = order
+        
+    def fulfill(self):
+        return
+    
+    def cancel(self):
+        return 

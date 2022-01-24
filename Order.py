@@ -1,22 +1,19 @@
 from Invoice import Invoice
-from OrderCancelledState import OrderCancelledState
-from OrderFulfilledState import OrderFulfilledState
-from OrderInProgressState import OrderInProgressState
-
+import OrderState
 
 class Order:
-    def __init__(self, products,  ordering, state, mediator):
+    state: OrderState
+    def __init__(self, products, ordering, mediator):
         self.ordering = ordering
-        self.state = state
         self.mediator = mediator
         self.products = products
         self.invoice = Invoice(ordering, products)
 
     def set_state(self, state):
         states = {
-            "cancelled": OrderCancelledState,
-            "fulfilled": OrderFulfilledState,
-            "progress": OrderInProgressState
+            "cancelled": Order.OrderCancelledState,
+            "fulfilled": Order.OrderFulfilledState,
+            "progress": Order.OrderInProgressState
         }
         
         self.state = states[state.lower()](self)
