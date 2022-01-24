@@ -10,8 +10,11 @@ class ShoppingView():
         self.storage = Storage()
         self.frame1 = Frame(self.notebook, width=500, height=500)
         self.frame5 = Frame(self.notebook, width=500, height=500)
-        self.storage_list = Listbox(self.frame1, height=8, width=50, border=0)
+        self.frame2 = Frame(self.notebook, width=500, height=500)
+        self.storage_list = Listbox(self.frame1, height=8, width=50, border=0, exportselection=0)
+        self.state_list = Listbox(self.frame2, height=8, width=50, border=0, exportselection=0)
         self.chosen_product = None
+        self.chosen_product_state = None
         self.product_idx = -1
         self.products_cart = {}
         
@@ -20,7 +23,6 @@ class ShoppingView():
             self.storage_list.delete(0, END)
             for i, (k, v) in enumerate(self.storage.get_products().items()):
                 self.storage_list.insert(i, k)
-                
 
         def select_item(e):
             global select_item
@@ -28,6 +30,16 @@ class ShoppingView():
             selected_product = list(self.storage.get_products())[index]
             self.chosen_product = selected_product
             print(f"SELECTING: {selected_product}")
+
+        def select_item_state(e):
+            global select_item_state
+            itm = self.state_list.get(self.state_list.curselection())
+            print(itm)
+
+            self.chosen_product_state = itm
+            print(f"SELECTING State: {itm}")
+            clear_textbox()
+            load_to_state_textbox()
         
         def buy_product():
             print(f'KUPUJE PRODUKT: {self.chosen_product}')
@@ -37,20 +49,60 @@ class ShoppingView():
                 self.products_cart[self.chosen_product] += 1
                 
             print(self.products_cart)
+
             # robimy order z ziomkiem i produktami
         #frames
         frame1 = Frame(self.notebook, width=500, height=500)
         frame5 = Frame(self.notebook, width=500, height=500)
+        frame2 = Frame(self.notebook, width=500, height=500)
 
         frame1.pack(fill="both", expand=1)
         frame5.pack(fill="both", expand=1)
+        frame2.pack(fill="both", expand=1)
 
         #adding frames
         self.notebook.add(frame1, text="Storage")
         self.notebook.add(frame5, text="experiment")
+        self.notebook.add(frame2, text="State")
+
+        def clear_textbox():
+            state_textbox.delete(1.0, 'end')
+
+        # frame2
+        self.state_list = Listbox(frame2, height=8, width=50, border=0, exportselection=0)
+        self.state_list.grid(row=1, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
+
+        self.state_list.bind('<<ListboxSelect>>', select_item_state)
+
+        # order_list()
+        state_textbox = Text(frame2, height=8, width=50, border=0)
+        state_textbox.grid(row=9, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
+
+        # clear_textbox()
+
+        def load_to_state():
+            for i, (k, v) in enumerate(self.storage.get_products().items()):
+                print(i, k, v)
+                self.state_list.insert(i, k)
+
+
+        def load_to_state_textbox():
+            print("xf")
+            state_textbox.insert(INSERT, f'ale masz fakturee wtf {self.chosen_product_state}')
+
+        state_cancelled_button = Button(frame2, text='cancel', width=12)
+        state_cancelled_button.grid(row=7, column=0, pady=10)
+
+        state_in_progress_button = Button(frame2, text='in progress', width=12)
+        state_in_progress_button.grid(row=7, column=1, pady=10)
+
+        state_fulfilled_button = Button(frame2, text='fulfilled', width=12)
+        state_fulfilled_button.grid(row=7, column=2, pady=10)
+
+
 
         #frame1
-        self.storage_list = Listbox(frame1, height=8, width=50, border=0)
+        self.storage_list = Listbox(frame1, height=8, width=50, border=0, exportselection=0)
         self.storage_list.grid(row=1, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
         populate_list()
         #bind select
@@ -92,11 +144,11 @@ class ShoppingView():
         buy_btn.grid(row=7, column=3, pady=10)
 
         #makeorder
-        order_btn = Button(frame1, text='Make order', width=12)
+        order_btn = Button(frame1, text='Make order', width=12, command=load_to_state)
         order_btn.grid(row=13, column=3, pady=10)
 
         #orderlist
-        order_list = Listbox(frame1, height=8, width=50, border=0)
+        order_list = Listbox(frame1, height=8, width=50, border=0, exportselection=0)
         order_list.grid(row=8, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
 
         #frame5
