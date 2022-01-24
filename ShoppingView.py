@@ -14,6 +14,7 @@ class ShoppingView():
         self.frame1 = Frame(self.notebook, width=500, height=500)
         self.frame5 = Frame(self.notebook, width=500, height=500)
         self.storage_list = Listbox(self.frame1, height=8, width=50, border=0)
+        self.order_box = Text(self.frame1, wrap=WORD, height=8, width=37)
         self.chosen_product = None
         self.product_idx = -1
         self.products_cart = {}
@@ -41,8 +42,14 @@ class ShoppingView():
             
             if not p in self.products_cart:
                 self.products_cart[p] = 1
+                self.order_box.insert(END, "- ")
+                self.order_box.insert(END, p )
+                self.order_box.insert(END, "\n")
             else:
                 self.products_cart[p] += 1
+                self.order_box.insert(END, "- ")
+                self.order_box.insert(END, p)
+                self.order_box.insert(END, "\n")
                 
             # print(self.products_cart)
             for k, v in self.products_cart.items():
@@ -92,22 +99,24 @@ class ShoppingView():
         #ordering name
         name_text = StringVar()
         name_label = Label(frame1, text='Name', font=('bold', 12))
-        name_label.grid(row=4, column=3, sticky=W)
+        name_label.grid(row=12, column=3, sticky=W)
         name_entry = Entry(frame1, textvariable=name_text)
-        name_entry.grid(row=4, column=4, sticky=W)
+        name_entry.grid(row=12, column=4, sticky=W)
 
 
         #buybutton(?)
         buy_btn = Button(frame1, text='Add to order', width=12, command=buy_product)
-        buy_btn.grid(row=7, column=3, pady=10)
+        buy_btn.grid(row=6, column=3, pady=10)
 
         #makeorder
         order_btn = Button(frame1, text='Make order', width=12)
         order_btn.grid(row=13, column=3, pady=10)
 
         #orderlist
-        order_list = Listbox(frame1, height=8, width=50, border=0)
-        order_list.grid(row=8, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
+        self.order_box = Text(frame1, wrap=WORD, height=8, width=37)
+        self.order_box.grid(row=8, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
+
+
 
         #frame5
         def generate_input():
