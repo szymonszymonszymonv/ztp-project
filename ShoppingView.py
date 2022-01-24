@@ -43,7 +43,9 @@ class ShoppingView():
 
         def select_item_state(e):
             global select_item_state
-            itm = self.state_list.get(self.state_list.curselection())
+            idx = self.state_list.curselection()[0]
+            # itm = self.state_list.get(self.state_list.curselection())
+            itm = self.orders[idx]
             print(itm)
 
             self.chosen_product_state = itm
@@ -53,14 +55,16 @@ class ShoppingView():
 
             
         def make_order():
+            self.state_list.delete(0, END)
             ordering = name_text.get()
-            order = Order(self.products_cart, ordering, self.mediator)
+            order = Order(dict(self.products_cart), str(ordering), self.mediator)
             self.orders.append(order)
             # self.state_list.insert(self.orders)
             for item in self.orders:
 
                 self.state_list.insert(END, item)
-            print(self.orders)
+            self.order_box.delete(1.0, 'end')
+            self.products_cart.clear()
 
 
         
@@ -125,7 +129,7 @@ class ShoppingView():
 
         def load_to_state_textbox():
 
-            state_textbox.insert(INSERT, f'ale masz fakturee wtf {self.chosen_product_state}')
+            state_textbox.insert(INSERT, f'{self.chosen_product_state.invoice}')
 
         state_cancelled_button = Button(frame2, text='cancel', width=12)
         state_cancelled_button.grid(row=7, column=0, pady=10)

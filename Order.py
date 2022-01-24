@@ -7,7 +7,7 @@ class Order:
         self.ordering = ordering
         self.mediator = mediator
         self.products = products
-        self.invoice = Invoice(ordering, products)
+        self.invoice = Invoice(self.ordering, self.products)
 
     def set_state(self, state):
         states = {
@@ -27,4 +27,6 @@ class Order:
         self.mediator.remove_from_storage(self.products)
         return
 
+    def __str__(self):
+        return self.invoice.get_number().__str__()
 

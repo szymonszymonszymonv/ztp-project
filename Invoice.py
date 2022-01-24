@@ -4,8 +4,8 @@ class Invoice :
     def  __init__(self, ordering, products):
         self.ordering = ordering
         self.products = products
-        self.number = uuid.uuid4()
-        self.sumPrice = self.get_sum_price()
+        self.number = uuid.uuid1()
+        self.sum_price = self.get_sum_price()
 
     def get_ordering(self):
         return self.ordering
@@ -25,3 +25,9 @@ class Invoice :
     def get_number(self):
         return self.number
 
+    def __str__(self):
+        str = f'nr. faktury: {self.number}\nzamawiajacy: {self.ordering}\nsuma: {self.sum_price}\nprodukty: '
+        for k, v in self.get_products().items():
+            str += f'{k}: x{v}\n'
+        
+        return str
