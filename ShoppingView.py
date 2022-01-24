@@ -1,24 +1,33 @@
 from ConcreteCreator import ConcreteCreator
+from Mediator import Mediator
 from Storage import Storage
 from tkinter import *
-
+from StandardWarranty import StandardWarranty
+from WarrantyMechanicalDamage import WarrantyMechanicalDamage
+from WarrantyTheft import WarrantyTheft
+from Order import Order
 
 class ShoppingView():
     def __init__(self, app, notebook):
         self.app = app
         self.notebook = notebook
         self.storage = Storage()
+        self.mediator = Mediator(self.storage)
         self.frame1 = Frame(self.notebook, width=500, height=500)
         self.frame5 = Frame(self.notebook, width=500, height=500)
+
         self.frame2 = Frame(self.notebook, width=500, height=500)
         self.storage_list = Listbox(self.frame1, height=8, width=50, border=0, exportselection=0)
         self.state_list = Listbox(self.frame2, height=8, width=50, border=0, exportselection=0)
+
         self.chosen_product = None
         self.chosen_product_state = None
         self.product_idx = -1
         self.products_cart = {}
+        self.orders = []
         
     def create_view(self):
+        
         def populate_list():
             self.storage_list.delete(0, END)
             for i, (k, v) in enumerate(self.storage.get_products().items()):
@@ -31,6 +40,7 @@ class ShoppingView():
             self.chosen_product = selected_product
             print(f"SELECTING: {selected_product}")
 
+
         def select_item_state(e):
             global select_item_state
             itm = self.state_list.get(self.state_list.curselection())
@@ -40,15 +50,42 @@ class ShoppingView():
             print(f"SELECTING State: {itm}")
             clear_textbox()
             load_to_state_textbox()
+
+            
+        def make_order():
+            ordering = name_text
+            order = Order(self.products_cart, ordering, self.mediator)
+            self.orders.append(order)
+            # self.state_list.insert(self.orders)
+            for item in self.orders:
+
+                self.state_list.insert(END, item)
+            print(self.orders)
+
+
         
         def buy_product():
-            print(f'KUPUJE PRODUKT: {self.chosen_product}')
-            if not self.chosen_product in self.products_cart:
-                self.products_cart[self.chosen_product] = 1
+            
+            p = StandardWarranty(self.chosen_product) if warranty.get() else self.chosen_product
+            p = WarrantyMechanicalDamage(p) if mechanical_warranty.get() else p
+            p = WarrantyTheft(p) if theft_warranty.get() else p
+            print(f'KUPUJE PRODUKT: {p}')
+            
+            if not p in self.products_cart:
+                self.products_cart[p] = 1
+                self.order_box.insert(END, "- ")
+                self.order_box.insert(END, p )
+                self.order_box.insert(END, "\n")
             else:
-                self.products_cart[self.chosen_product] += 1
+                self.products_cart[p] += 1
+                self.order_box.insert(END, "- ")
+                self.order_box.insert(END, p)
+                self.order_box.insert(END, "\n")
                 
-            print(self.products_cart)
+
+            # print(self.products_cart)
+            for k, v in self.products_cart.items():
+                print(k.__str__())
 
             # robimy order z ziomkiem i produktami
         #frames
@@ -87,7 +124,7 @@ class ShoppingView():
 
 
         def load_to_state_textbox():
-            print("xf")
+
             state_textbox.insert(INSERT, f'ale masz fakturee wtf {self.chosen_product_state}')
 
         state_cancelled_button = Button(frame2, text='cancel', width=12)
@@ -134,22 +171,33 @@ class ShoppingView():
         #ordering name
         name_text = StringVar()
         name_label = Label(frame1, text='Name', font=('bold', 12))
-        name_label.grid(row=4, column=3, sticky=W)
+        name_label.grid(row=12, column=3, sticky=W)
         name_entry = Entry(frame1, textvariable=name_text)
-        name_entry.grid(row=4, column=4, sticky=W)
+        name_entry.grid(row=12, column=4, sticky=W)
 
 
         #buybutton(?)
         buy_btn = Button(frame1, text='Add to order', width=12, command=buy_product)
-        buy_btn.grid(row=7, column=3, pady=10)
+        buy_btn.grid(row=6, column=3, pady=10)
 
         #makeorder
-        order_btn = Button(frame1, text='Make order', width=12, command=load_to_state)
-        order_btn.grid(row=13, column=3, pady=10)
+
+        # order_btn = Button(frame1, text='Make order', width=12, command=load_to_state)
+        # order_btn.grid(row=13, column=3, pady=10)
 
         #orderlist
         order_list = Listbox(frame1, height=8, width=50, border=0, exportselection=0)
         order_list.grid(row=8, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
+
+        order_btn = Button(frame1, text='Make order', width=12, command=make_order)
+        order_btn.grid(row=13, column=3, pady=10)
+
+        #orderlist
+        self.order_box = Text(frame1, wrap=WORD, height=8, width=37)
+        self.order_box.grid(row=8, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
+
+
+
 
         #frame5
         def generate_input():
@@ -200,12 +248,12 @@ class ShoppingView():
                 
             product = ConcreteCreator.create(product_type,
                                     description_text.get(),
-                                    price_text.get(),
-                                    tax_text.get(),
+                                    float(price_text.get()),
+                                    float(tax_text.get()),
                                     active_field)
             print(f'adding {type(product)} ({product})')
                 
-            add_product(product)
+            self.storage.add_product(product)
             self.storage_list.delete(0, END)
             populate_list()
 
