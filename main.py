@@ -6,33 +6,30 @@ from WarrantyMechanicalDamage import WarrantyMechanicalDamage
 
 from WarrantyTheft import WarrantyTheft
 
-# tv = ConcreteCreator.create("tv", desc="duzy", price=5, tax=2, inches=40)
-# tv2 = ConcreteCreator.create("tv", desc="maly", price=2500, tax=100, inches=41)
+tv = ConcreteCreator.create("tv", "duzy LG", 5, 2, 40)
+tv2 = ConcreteCreator.create("tv", "maly Samsung", 2500, 100, 41)
 s = Storage()
-# s.add_product(tv)
-# s.add_product(tv2)
-# s.add_product(tv2)
-# s.add_product(tv2)
-# s.add_product(tv2)
-
-# iphone = ConcreteCreator.create("phone", desc="iphone12", price=5000, tax=500, bluetooth=True)
-# iphone_warranty = WarrantyTheft(iphone)
-# iphone_warranties = WarrantyMechanicalDamage(iphone_warranty)
-
-# print(iphone_warranties.get_description())
-print(s.get_products())
-
+s.add_product(tv)
+s.add_product(tv2)
+s.add_product(tv2)
+s.add_product(tv2)
 
 def populate_list():
+    new_list = []
     storage_list.delete(0, END)
-    for row in s.get_products():
-        storage_list.insert(END, row)
+    for key, value in s.get_products().items():
+        new_list.append({key: value})
+        
+    for i, (k, v) in enumerate(s.get_products().items()):
+        print(f'POPULATE_LIST(): {i, k, v}')
+        storage_list.insert(i, k)
 
 def select_item(event):
     global select_item
     index = storage_list.curselection()[0]
     selected_item = storage_list.get(index)
-    print(selected_item)
+    print(list(s.get_products())[index])
+
 
 #app initializer
 app = Tk()
@@ -123,7 +120,8 @@ def generate_input():
         
 def add_product():
     #phone
-    product = None
+    product_type = ""
+    active_field = None
     if selected.get() == 1:
         active_field = bluetooth.get()
         product_type = "phone"
@@ -137,12 +135,14 @@ def add_product():
     if selected.get() == 3:
         product_type = "tv"
         active_field = inches_text.get()
+    print(f'selected type: {product_type}')
         
     product = ConcreteCreator.create(product_type,
                               description_text.get(),
                               price_text.get(),
                               tax_text.get(),
                               active_field)
+    print(f'adding {type(product)} ({product})')
         
     s.add_product(product)
     storage_list.delete(0, END)
@@ -200,8 +200,6 @@ bluetooth_entry.pack(side="top")
 
 add_btn = Button(frame6, text='Add Product', width=12, command=add_product)
 add_btn.pack(side="bottom")
-
-print(s.get_products())
 
 app.mainloop()
 
