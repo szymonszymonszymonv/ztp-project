@@ -58,6 +58,7 @@ class ShoppingView():
             self.state_list.delete(0, END)
             ordering = name_text.get()
             order = Order(dict(self.products_cart), str(ordering), self.mediator)
+            order.set_state('progress')
             self.orders.append(order)
             # self.state_list.insert(self.orders)
             for item in self.orders:
@@ -65,11 +66,14 @@ class ShoppingView():
                 self.state_list.insert(END, item)
             self.order_box.delete(1.0, 'end')
             self.products_cart.clear()
-
-
+            
+        def cancel():
+            self.chosen_product_state.state.cancel()
+        
+        def fulfill():
+            self.chosen_product_state.state.fulfill()
         
         def buy_product():
-            
             p = StandardWarranty(self.chosen_product) if warranty.get() else self.chosen_product
             p = WarrantyMechanicalDamage(p) if mechanical_warranty.get() else p
             p = WarrantyTheft(p) if theft_warranty.get() else p
@@ -119,25 +123,15 @@ class ShoppingView():
         state_textbox = Text(frame2, height=8, width=50, border=0)
         state_textbox.grid(row=9, column=0, columnspan=3, rowspan=6, pady=20, padx=20)
 
-        # clear_textbox()
-
-        def load_to_state():
-            for i, (k, v) in enumerate(self.storage.get_products().items()):
-                print(i, k, v)
-                self.state_list.insert(i, k)
-
 
         def load_to_state_textbox():
 
             state_textbox.insert(INSERT, f'{self.chosen_product_state.invoice}')
 
-        state_cancelled_button = Button(frame2, text='cancel', width=12)
+        state_cancelled_button = Button(frame2, text='cancel', width=12, command=cancel)
         state_cancelled_button.grid(row=7, column=0, pady=10)
 
-        state_in_progress_button = Button(frame2, text='in progress', width=12)
-        state_in_progress_button.grid(row=7, column=1, pady=10)
-
-        state_fulfilled_button = Button(frame2, text='fulfilled', width=12)
+        state_fulfilled_button = Button(frame2, text='fulfill', width=12, command=fulfill)
         state_fulfilled_button.grid(row=7, column=2, pady=10)
 
 
@@ -248,7 +242,6 @@ class ShoppingView():
             if selected.get() == 3:
                 product_type = "tv"
                 active_field = inches_text.get()
-            print(f'selected type: {product_type}')
                 
             product = ConcreteCreator.create(product_type,
                                     description_text.get(),

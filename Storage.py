@@ -22,18 +22,39 @@ class Storage(metaclass=Singleton):
             self.products.pop(product, None)
             
     def add_products(self, products):
+        # for key, val in products.items():
+        #     added = False
+        #     for product, quantity in self.products.items():
+        #         if key.id == product.id:
+        #             self.products[product] += val
+        #             added = True
+        #         if not added:
+        #             self.products[key]
+        
         for key, val in products.items():
-            if key in self.products:
-                self.products[key] += val
+            prod = key
+            if hasattr(key, 'original'):
+                prod = key.original
+            if prod in self.products:
+                self.products[prod] += val
             else:
-                self.products[key] = val
+                self.products[prod] = val
                 
     def delete_products(self, products):
         for key, val in products.items():
-            if key in self.products:
-                self.products[key] -= val
-                if self.products[key] <= 0:
-                    self.products.pop(key, None)
+            prod = key
+            if hasattr(key, 'original'):
+                prod = key.original
+            
+            if prod in self.products:
+                self.products[prod] -= val
+                if self.products[prod] <= 0:
+                    self.products.pop(prod, None)
+        #     for product, quantity in self.products.items():
+        #         if key.id == product.id:
+        #             self.products[product] -= val
+        #         if self.products[product] <= 0:
+        #             self.products.pop(product, None)
             
         pass
             

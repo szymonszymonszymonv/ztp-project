@@ -1,8 +1,11 @@
 from IProduct import IProduct
+import uuid
+
 
 class Tv(IProduct):
     inches: float
     def __init__(self, desc, price, tax, inches):
+        self.id = uuid.uuid1()
         self.inches = inches
         self.description = desc
         self.price = price

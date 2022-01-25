@@ -1,7 +1,7 @@
 import abc
 import Order
 
-class OrderState(abc.ABCMeta):
+class OrderState(abc.ABC):
     order: Order
     @classmethod
     def __subclasshook__(cls, subclass):
@@ -28,11 +28,16 @@ class OrderInProgressState(OrderState):
         
     def fulfill(self):
         self.order.notify_mediator_remove()
+        self.order.set_state("fulfilled")
         return
     
     def cancel(self):
         self.order.notify_mediator_add()
+        self.order.set_state("cancelled")
         return 
+    
+    def __str__(self):
+        return "in progress"
     
 class OrderFulfilledState(OrderState):
     def __init__(self, order):
@@ -42,8 +47,12 @@ class OrderFulfilledState(OrderState):
         return
     
     def cancel(self):
+        self.order.set_state("cancelled")
         self.order.notify_mediator_add()
         return 
+    
+    def __str__(self):
+        return "fulfilled"
     
 class OrderCancelledState(OrderState):
     def __init__(self, order):
@@ -54,3 +63,6 @@ class OrderCancelledState(OrderState):
     
     def cancel(self):
         return 
+    
+    def __str__(self):
+        return "cancelled"

@@ -3,7 +3,11 @@ from IProduct import IProduct
 class Warranty(IProduct):
 
     def __init__(self, product):
+        if not hasattr(product, 'original'):
+            self.original = product
+            
         self._product = product
+        self.id = product.id
 
     def get_description(self):
         return self._product.description

@@ -1,5 +1,5 @@
 from Invoice import Invoice
-import OrderState
+from OrderState import *
 
 class Order:
     state: OrderState
@@ -11,9 +11,9 @@ class Order:
 
     def set_state(self, state):
         states = {
-            "cancelled": Order.OrderCancelledState,
-            "fulfilled": Order.OrderFulfilledState,
-            "progress": Order.OrderInProgressState
+            "cancelled": OrderCancelledState,
+            "fulfilled": OrderFulfilledState,
+            "progress": OrderInProgressState
         }
         
         self.state = states[state.lower()](self)
@@ -28,5 +28,5 @@ class Order:
         return
 
     def __str__(self):
-        return self.invoice.get_number().__str__()
+        return f'{self.invoice.get_number().__str__()} {self.state.__str__()}'
 

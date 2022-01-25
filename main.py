@@ -13,8 +13,6 @@ tv2 = ConcreteCreator.create("tv", "maly Samsung", 2500, 100, 41)
 s = Storage()
 s.add_product(tv)
 s.add_product(tv2)
-s.add_product(tv2)
-s.add_product(tv2)
 
 #app initializer
 app = Tk()

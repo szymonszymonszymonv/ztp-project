@@ -1,8 +1,10 @@
 from IProduct import IProduct
+import uuid
 
 class Phone(IProduct):
     bluetooth: bool
     def __init__(self, desc, price, tax, bluetooth):
+        self.id = uuid.uuid1()
         self.bluetooth = bluetooth
         self.description = desc
         self.price = price

@@ -1,8 +1,11 @@
 from IProduct import IProduct
+import uuid
+
 
 class Computer(IProduct):
     operating_system: str
     def __init__(self, desc, price, tax, os):
+        self.id = uuid.uuid1()
         self.operating_system = os
         self.description = desc
         self.price = price
