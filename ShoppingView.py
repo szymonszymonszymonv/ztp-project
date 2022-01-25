@@ -66,12 +66,20 @@ class ShoppingView():
                 self.state_list.insert(END, item)
             self.order_box.delete(1.0, 'end')
             self.products_cart.clear()
-            
+
         def cancel():
             self.chosen_product_state.state.cancel()
-        
+            self.state_list.delete(0, END)
+            for item in self.orders:
+                self.state_list.insert(END, item)
+            populate_list()
+
         def fulfill():
             self.chosen_product_state.state.fulfill()
+            self.state_list.delete(0, END)
+            for item in self.orders:
+                self.state_list.insert(END, item)
+            populate_list()
         
         def buy_product():
             p = StandardWarranty(self.chosen_product) if warranty.get() else self.chosen_product
