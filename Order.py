@@ -8,6 +8,7 @@ class Order:
         self.mediator = mediator
         self.products = products
         self.invoice = Invoice(self.ordering, self.products)
+        self.mediator.remove_from_storage(products)
 
     def set_state(self, state):
         states = {

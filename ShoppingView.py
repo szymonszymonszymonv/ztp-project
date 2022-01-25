@@ -57,10 +57,13 @@ class ShoppingView():
         def make_order():
             self.state_list.delete(0, END)
             ordering = name_text.get()
-            order = Order(dict(self.products_cart), str(ordering), self.mediator)
+            cart = dict(self.products_cart)
+            order = Order(cart, str(ordering), self.mediator)
+            
             order.set_state('progress')
             self.orders.append(order)
-            # self.state_list.insert(self.orders)
+            populate_list()
+            
             for item in self.orders:
 
                 self.state_list.insert(END, item)
