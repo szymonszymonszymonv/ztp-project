@@ -31,4 +31,4 @@ class IProduct(metaclass=abc.ABCMeta):
         raise NotImplementedError
     
     def __str__(self):
-        return f'{self.get_description()} ({self.get_price()})'
+        return f'{type(self).__name__} {self.get_description()} ({self.get_price()})'

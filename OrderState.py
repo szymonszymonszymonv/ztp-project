@@ -19,8 +19,6 @@ class OrderState(abc.ABC):
     def cancel(self):
         """cancel order"""
         raise NotImplementedError
-    
-
 
 class OrderInProgressState(OrderState):
     def __init__(self, order):
